@@ -5,15 +5,99 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CCD2D2"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:background="@drawable/background_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/rounded_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="@+id/view4"
+        app:layout_constraintTop_toTopOf="@+id/view4"
+        app:srcCompat="@drawable/quiz_icon" />
+
+    <TextView
+        android:id="@+id/txtInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Instruction"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/view4"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/view4" />
+
+    <TextView
+        android:id="@+id/txtCCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Category"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/txtInstruction"
+        app:layout_constraintTop_toBottomOf="@+id/txtInstruction" />
+
+    <TextView
+        android:id="@+id/txtPlayQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Quiz"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/txtCCategory"
+        app:layout_constraintTop_toBottomOf="@+id/txtCCategory" />
+
+    <TextView
+        android:id="@+id/txtCollectCoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Collect Coin"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/txtPlayQuiz"
+        app:layout_constraintTop_toBottomOf="@+id/txtPlayQuiz" />
+
+    <TextView
+        android:id="@+id/txtEarnMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Earn Money"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/txtCollectCoin"
+        app:layout_constraintTop_toBottomOf="@+id/txtCollectCoin" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
