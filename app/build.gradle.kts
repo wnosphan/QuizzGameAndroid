@@ -7,6 +7,9 @@ android {
     namespace = "com.prm392.quizgame"
     compileSdk = 34
 
+    buildFeatures{
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.prm392.quizgame"
         minSdk = 30
@@ -31,9 +34,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-  buildFeatures{
-      viewBinding = true
-  }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 
@@ -48,8 +51,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.smooth.bottom.bar)
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }
