@@ -6,6 +6,8 @@ public class User {
     private String password;
     private String referCode;
 
+
+    private long coins = 25;
     public User() {
     }
 
@@ -46,5 +48,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public long getCoins() {
+        return coins;
+    }
+
+    public void setCoins(long coins) {
+        this.coins = coins;
     }
 }
