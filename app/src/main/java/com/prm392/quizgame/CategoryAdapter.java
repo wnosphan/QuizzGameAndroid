@@ -1,6 +1,7 @@
 package com.prm392.quizgame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category =categories.get(position);
         holder.textView.setText(category.getCategoryName());
         Glide.with(context).load(category.getCategoryImage()).into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, QuizActivity.class);
+                intent.putExtra("catId",category.getCategoryId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
