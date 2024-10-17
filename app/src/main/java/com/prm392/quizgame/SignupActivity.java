@@ -70,11 +70,19 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
 
-
                     }
                 });
 
             }
         });
+
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+            }
+        });
     }
+         
+
 }

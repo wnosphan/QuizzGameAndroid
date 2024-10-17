@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailProfileBox" />
 
     <EditText
-        android:id="@+id/PasswordProfileBox"
+        android:id="@+id/passwordProfileBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -86,7 +86,21 @@
         android:fontFamily="sans-serif-medium"
         android:text="@string/update_profile"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/PasswordProfileBox"
-        app:layout_constraintStart_toStartOf="@+id/PasswordProfileBox"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordProfileBox" />
+        app:layout_constraintEnd_toEndOf="@+id/passwordProfileBox"
+        app:layout_constraintStart_toStartOf="@+id/passwordProfileBox"
+        app:layout_constraintTop_toBottomOf="@+id/passwordProfileBox" />
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_logout"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/updateProfileBtn"
+        app:layout_constraintStart_toStartOf="@+id/updateProfileBtn"
+        app:layout_constraintTop_toBottomOf="@+id/updateProfileBtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
