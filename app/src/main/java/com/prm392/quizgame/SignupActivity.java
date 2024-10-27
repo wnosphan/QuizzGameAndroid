@@ -39,10 +39,10 @@ public class SignupActivity extends AppCompatActivity {
                 email = binding.emailBox.getText().toString();
                 pass = binding.passwordBox.getText().toString();
                 name = binding.nameBox.getText().toString();
-                referCode = binding.referBox.getText().toString();
+//                referCode = binding.referBox.getText().toString();
 
 
-                User user = new User(name, email, pass, referCode);
+                User user = new User(name, email, pass, 1);
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
