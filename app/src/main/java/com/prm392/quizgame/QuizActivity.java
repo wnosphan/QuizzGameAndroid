@@ -3,6 +3,7 @@ package com.prm392.quizgame;
 import static com.prm392.quizgame.R.*;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -16,11 +17,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.prm392.quizgame.databinding.ActivityMainBinding;
 import com.prm392.quizgame.databinding.ActivityQuizBinding;
 import com.prm392.quizgame.model.Question;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -30,29 +36,79 @@ public class QuizActivity extends AppCompatActivity {
     int index = 0;
     Question question;
     CountDownTimer timer;
+    FirebaseFirestore db;
+    int correctAnswers = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.activity_quiz);
+         String categoryId = getIntent().getStringExtra("catId");
+
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         questions = new ArrayList<>();
-        questions.add(new Question("What is the capital of India","New Delhi","Mumbai","Kolkata","Chennai","Kolkata"));
-        questions.add(new Question("What is the capital of USA","New York","Washington DC","Los Angeles","Chicago","Washington DC"));
+        db = FirebaseFirestore.getInstance();
 
-        setNextQuestion();
-        resetTimer();
-        // Nhận dữ liệu categoryId từ Intent
-        String categoryId = getIntent().getStringExtra("catId");
+        // Load câu hỏi từ Firebase
+        loadQuestionsFromFirebase(categoryId);
     }
+
+    void loadQuestionsFromFirebase(String categoryId) {
+        Random random = new Random();
+        final int rand = random.nextInt(2);
+
+        db.collection("category").document(categoryId)
+                .collection("question").whereLessThanOrEqualTo("index", rand)
+                .orderBy("index").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            db.collection("category").document(categoryId)
+                                    .collection("question").whereGreaterThanOrEqualTo("index", rand)
+                                    .orderBy("index").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                                                Question question = snapshot.toObject(Question.class);
+                                                questions.add(question);
+                                            }
+                                            setNextQuestion();
+                                        }
+                                    });
+                        } else {
+                            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                                Question question = snapshot.toObject(Question.class);
+                                questions.add(question);
+                            }
+                            setNextQuestion();
+                        }
+                    }
+                });
+
+    }
+
+    void addQuestionsToList(QuerySnapshot queryDocumentSnapshots) {
+        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+            Question question = snapshot.toObject(Question.class);
+            questions.add(question);
+        }
+    }
+
+    void startQuiz() {
+        if (questions.size() > 0) {
+            resetTimer();
+            setNextQuestion();
+        } else {
+            Toast.makeText(this, "No questions found!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
     void setNextQuestion() {
-        // Dừng bộ đếm của câu hỏi trước
         if (timer != null) {
-            timer.cancel();  // Hủy timer cũ trước khi khởi tạo timer mới
+            timer.cancel(); // Dừng bộ đếm hiện tại
         }
 
         if (index < questions.size()) {
-            // Khởi động lại bộ đếm cho câu hỏi mới
             resetTimer();
             timer.start();
 
@@ -68,10 +124,14 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
+
     public void checkAnswer(TextView textView){
         String answer = textView.getText().toString();
         if(answer.equals(question.getCorrectAns())){
+            correctAnswers++;
+            showAnswer();
             textView.setBackground(getResources().getDrawable(drawable.option_right));
+
         } else {
             showAnswer();
             textView.setBackground(getResources().getDrawable(drawable.option_wrong));
@@ -146,8 +206,12 @@ public class QuizActivity extends AppCompatActivity {
                 reset();  // Đặt lại giao diện của các tùy chọn
                 setNextQuestion();  // Thiết lập câu hỏi mới và khởi động lại timer
             } else {
-                Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
-                finish();
+                Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+
+                intent.putExtra("correct", correctAnswers);
+                intent.putExtra("total", questions.size());
+//                Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
             }
         } else if (view.getId() == R.id.quizBtn) {
             finish();  // Thoát quiz khi nhấn "Quit"
