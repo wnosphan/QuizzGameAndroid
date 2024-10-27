@@ -1,14 +1,10 @@
 package com.prm392.quizgame;
 
-import static com.prm392.quizgame.R.*;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +20,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.prm392.quizgame.databinding.ActivityMainBinding;
 import com.prm392.quizgame.databinding.ActivityQuizBinding;
 import com.prm392.quizgame.model.Question;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class QuizActivity extends AppCompatActivity {
+public class UserQuizActivity extends AppCompatActivity {
 
 
     ActivityQuizBinding binding;
@@ -45,49 +40,37 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         String categoryId = getIntent().getStringExtra("catId");
+        String categoryId = getIntent().getStringExtra("catId");
 
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         questions = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // Load câu hỏi từ Firebase
-        loadQuestionsFromFirebase(categoryId);
+        loadQuestionsOfUserFromFireBase(auth.getCurrentUser().getUid(),categoryId);
     }
 
-    void loadQuestionsFromFirebase(String categoryId) {
-        Random random = new Random();
-        final int rand = random.nextInt(2);
-
-        db.collection("category").document(categoryId)
-                .collection("question").whereLessThanOrEqualTo("index", rand)
-                .orderBy("index").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()) {
-                            db.collection("category").document(categoryId)
-                                    .collection("question").whereGreaterThanOrEqualTo("index", rand)
-                                    .orderBy("index").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                                                Question question = snapshot.toObject(Question.class);
-                                                questions.add(question);
-                                            }
-                                            setNextQuestion();
-                                        }
-                                    });
-                        } else {
-                            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                                Question question = snapshot.toObject(Question.class);
-                                questions.add(question);
-                            }
-                            setNextQuestion();
+    void loadQuestionsOfUserFromFireBase(String uid, String catId){
+        db.collection("quizofuser")
+                .document(uid)
+                .collection("categories")
+                .document(catId)
+                .collection("questions")  // Assuming questions are stored in this sub-collection
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        questions.clear();  // Clear the list before adding new items
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Question question = document.toObject(Question.class);
+                            questions.add(question);
                         }
+                        setNextQuestion();
+                    } else {
+                        Log.e("Firestore", "Error getting questions: ", task.getException());
                     }
                 });
-
     }
 
     void addQuestionsToList(QuerySnapshot queryDocumentSnapshots) {
@@ -134,11 +117,11 @@ public class QuizActivity extends AppCompatActivity {
         if(answer.equals(question.getCorrectAns())){
             correctAnswers++;
             showAnswer();
-            textView.setBackground(getResources().getDrawable(drawable.option_right));
+            textView.setBackground(getResources().getDrawable(R.drawable.option_right));
 
         } else {
             showAnswer();
-            textView.setBackground(getResources().getDrawable(drawable.option_wrong));
+            textView.setBackground(getResources().getDrawable(R.drawable.option_wrong));
         }
 
     }
@@ -159,7 +142,7 @@ public class QuizActivity extends AppCompatActivity {
                     reset();
                     setNextQuestion();
                 } else {
-                    Toast.makeText(QuizActivity.this, "Quiz Finished", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserQuizActivity.this, "Quiz Finished", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -170,29 +153,29 @@ public class QuizActivity extends AppCompatActivity {
 
     void showAnswer(){
         if(question.getCorrectAns().equals(binding.option1.getText().toString())){
-            binding.option1.setBackground(getResources().getDrawable(drawable.option_right));
+            binding.option1.setBackground(getResources().getDrawable(R.drawable.option_right));
         } else if(question.getCorrectAns().equals(binding.option2.getText().toString())){
-            binding.option2.setBackground(getResources().getDrawable(drawable.option_right));
+            binding.option2.setBackground(getResources().getDrawable(R.drawable.option_right));
         } else if(question.getCorrectAns().equals(binding.option3.getText().toString())){
-            binding.option3.setBackground(getResources().getDrawable(drawable.option_right));
+            binding.option3.setBackground(getResources().getDrawable(R.drawable.option_right));
         } else if(question.getCorrectAns().equals(binding.option4.getText().toString())){
-            binding.option4.setBackground(getResources().getDrawable(drawable.option_right));
+            binding.option4.setBackground(getResources().getDrawable(R.drawable.option_right));
         }
     }
     void reset(){
-        binding.option1.setBackground(getResources().getDrawable(drawable.option_unselected));
-        binding.option2.setBackground(getResources().getDrawable(drawable.option_unselected));
-        binding.option3.setBackground(getResources().getDrawable(drawable.option_unselected));
-        binding.option4.setBackground(getResources().getDrawable(drawable.option_unselected));
+        binding.option1.setBackground(getResources().getDrawable(R.drawable.option_unselected));
+        binding.option2.setBackground(getResources().getDrawable(R.drawable.option_unselected));
+        binding.option3.setBackground(getResources().getDrawable(R.drawable.option_unselected));
+        binding.option4.setBackground(getResources().getDrawable(R.drawable.option_unselected));
     }
     public void onClick(View view) {
-        if (view.getId() == id.option_1) {
+        if (view.getId() == R.id.option_1) {
             checkAnswer(binding.option1);
-        } else if (view.getId() == id.option_2) {
+        } else if (view.getId() == R.id.option_2) {
             checkAnswer(binding.option2);
-        } else if (view.getId() == id.option_3) {
+        } else if (view.getId() == R.id.option_3) {
             checkAnswer(binding.option3);
-        } else if (view.getId() == id.option_4) {
+        } else if (view.getId() == R.id.option_4) {
             checkAnswer(binding.option4);
         }
 
@@ -210,7 +193,7 @@ public class QuizActivity extends AppCompatActivity {
                 reset();  // Đặt lại giao diện của các tùy chọn
                 setNextQuestion();  // Thiết lập câu hỏi mới và khởi động lại timer
             } else {
-                Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+                Intent intent = new Intent(UserQuizActivity.this, ResultActivity.class);
 
                 intent.putExtra("correct", correctAnswers);
                 intent.putExtra("total", questions.size());
@@ -221,5 +204,4 @@ public class QuizActivity extends AppCompatActivity {
             finish();  // Thoát quiz khi nhấn "Quit"
         }
     }
-
 }

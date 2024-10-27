@@ -19,6 +19,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".UserQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QuestionOfUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".SpinnerActivity"
             android:exported="false" />
         <activity
