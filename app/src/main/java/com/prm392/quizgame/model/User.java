@@ -4,17 +4,17 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String referCode;
-
+    private long changeSpin;
     private long coins = 25;
+
     public User() {
     }
 
-    public User(String name, String email, String password, String referCode) {
+    public User(String name, String email, String password, long changeSpin) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.referCode = referCode;
+        this.changeSpin = changeSpin;
     }
 
     public User(String name, String email, String password) {
@@ -39,12 +39,12 @@ public class User {
         this.email = email;
     }
 
-    public String getReferCode() {
-        return referCode;
+    public long getChangeSpin() {
+        return changeSpin;
     }
 
-    public void setReferCode(String referCode) {
-        this.referCode = referCode;
+    public void setChangeSpin(long changeSpin) {
+        this.changeSpin = changeSpin;
     }
 
     public String getPassword() {

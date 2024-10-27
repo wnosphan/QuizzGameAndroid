@@ -1,5 +1,6 @@
 package com.prm392.quizgame.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.prm392.quizgame.CategoryAdapter;
 import com.prm392.quizgame.MainActivity;
 import com.prm392.quizgame.R;
+import com.prm392.quizgame.SpinnerActivity;
 import com.prm392.quizgame.databinding.FragmentHomeBinding;
 import com.prm392.quizgame.model.Category;
 
@@ -66,6 +68,12 @@ public class HomeFragment extends Fragment {
 
         binding.categoryList.setLayoutManager(new GridLayoutManager(getContext(),2));
         binding.categoryList.setAdapter(adapter);
+
+        binding.btnSpinner.setOnClickListener(view -> {
+            startActivity(new Intent(getContext(), SpinnerActivity.class));
+        });
+
+
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
