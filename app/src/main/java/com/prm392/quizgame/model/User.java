@@ -6,7 +6,6 @@ public class User {
     private String password;
     private String referCode;
 
-
     private long coins = 25;
     public User() {
     }
