@@ -26,6 +26,9 @@ import com.prm392.quizgame.databinding.ActivityQuizBinding;
 import com.prm392.quizgame.model.Question;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class QuizActivity extends AppCompatActivity {
@@ -38,6 +41,8 @@ public class QuizActivity extends AppCompatActivity {
     CountDownTimer timer;
     FirebaseFirestore db;
     int correctAnswers = 0;
+    private boolean isFiftyFiftyUsed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,42 +185,65 @@ public class QuizActivity extends AppCompatActivity {
         binding.option2.setBackground(getResources().getDrawable(drawable.option_unselected));
         binding.option3.setBackground(getResources().getDrawable(drawable.option_unselected));
         binding.option4.setBackground(getResources().getDrawable(drawable.option_unselected));
+
+        binding.option1.setVisibility(View.VISIBLE);
+        binding.option2.setVisibility(View.VISIBLE);
+        binding.option3.setVisibility(View.VISIBLE);
+        binding.option4.setVisibility(View.VISIBLE);
     }
     public void onClick(View view) {
-        if (view.getId() == id.option_1) {
+        // Xử lý nút 50:50
+        if (view.getId() == R.id.imageView3 && !isFiftyFiftyUsed) {
+            isFiftyFiftyUsed = true; // Đánh dấu rằng nút 50:50 đã được sử dụng
+            binding.imageView3.setVisibility(View.INVISIBLE); // Ẩn nút 50:50
+            // Lấy danh sách các tùy chọn sai ngẫu nhiên
+            List<TextView> options = new ArrayList<>(Arrays.asList(binding.option1, binding.option2, binding.option3, binding.option4));
+            options.removeIf(option -> option.getText().toString().equals(question.getCorrectAns())); // Loại bỏ đáp án đúng
+
+            // Chọn 2 tùy chọn sai để ẩn
+            Collections.shuffle(options); // Trộn ngẫu nhiên danh sách đáp án sai
+            options.get(0).setVisibility(View.INVISIBLE); // Ẩn đáp án sai đầu tiên
+            options.get(1).setVisibility(View.INVISIBLE); // Ẩn đáp án sai thứ hai
+
+            // Thoát khỏi phương thức sau khi xử lý nút 50:50
+            return;
+        }
+
+        // Xử lý các nút đáp án
+        if (view.getId() == R.id.option_1) {
             checkAnswer(binding.option1);
-        } else if (view.getId() == id.option_2) {
+        } else if (view.getId() == R.id.option_2) {
             checkAnswer(binding.option2);
-        } else if (view.getId() == id.option_3) {
+        } else if (view.getId() == R.id.option_3) {
             checkAnswer(binding.option3);
-        } else if (view.getId() == id.option_4) {
+        } else if (view.getId() == R.id.option_4) {
             checkAnswer(binding.option4);
         }
 
         // Dừng bộ đếm ngay sau khi người dùng chọn câu trả lời
         if (timer != null) {
-            timer.cancel();  // Hủy bộ đếm thời gian hiện tại
+            timer.cancel();
         }
 
-        showAnswer();  // Hiển thị đáp án đúng sau khi người dùng chọn câu trả lời
+        showAnswer(); // Hiển thị đáp án đúng sau khi người dùng chọn câu trả lời
 
         // Chuyển sang câu hỏi tiếp theo khi nhấn nút "Next"
         if (view.getId() == R.id.nextBtn) {
             index++;
             if (index < questions.size()) {
-                reset();  // Đặt lại giao diện của các tùy chọn
-                setNextQuestion();  // Thiết lập câu hỏi mới và khởi động lại timer
+                reset(); // Đặt lại giao diện của các tùy chọn
+                setNextQuestion(); // Thiết lập câu hỏi mới và khởi động lại timer
             } else {
                 Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
-
                 intent.putExtra("correct", correctAnswers);
                 intent.putExtra("total", questions.size());
-//                Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
         } else if (view.getId() == R.id.quizBtn) {
-            finish();  // Thoát quiz khi nhấn "Quit"
+            finish(); // Thoát quiz khi nhấn "Quit"
         }
     }
+
+
 
 }

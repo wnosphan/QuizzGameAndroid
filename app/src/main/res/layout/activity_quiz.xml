@@ -74,25 +74,29 @@
         app:layout_constraintStart_toStartOf="@+id/view5"
         app:layout_constraintTop_toTopOf="@+id/view5" />
 
-    <ImageView
+    <Button
         android:id="@+id/imageView3"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:background="@drawable/fiftyfiftyline"
+        android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
         app:layout_constraintStart_toStartOf="@+id/view5"
-        app:layout_constraintTop_toBottomOf="@+id/view5"
-        app:srcCompat="@drawable/fiftyfiftyline" />
+        app:layout_constraintTop_toBottomOf="@+id/view5" />
 
-    <ImageView
+
+    <Button
         android:id="@+id/imageView4"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
+        android:background="@drawable/audiencepoll"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
         app:layout_constraintEnd_toEndOf="@+id/view5"
         app:layout_constraintTop_toBottomOf="@+id/view5"
-        app:srcCompat="@drawable/audiencepoll" />
+        android:onClick="onClick" />
+
 
     <TextView
         android:id="@+id/option_1"
@@ -178,4 +182,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/nextBtn"
         app:layout_constraintTop_toBottomOf="@+id/option_4" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
