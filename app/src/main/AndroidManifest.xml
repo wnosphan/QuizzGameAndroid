@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserQuizActivity"
             android:exported="false" />
         <activity
@@ -32,7 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".QuizActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity android:name=".SignupActivity" />
         <activity
             android:name=".LoginActivity"
