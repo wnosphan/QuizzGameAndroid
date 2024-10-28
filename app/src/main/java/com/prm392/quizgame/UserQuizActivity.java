@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -44,6 +45,9 @@ public class UserQuizActivity extends AppCompatActivity {
 
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.getRoot().setVisibility(View.GONE);
+
         questions = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -52,25 +56,51 @@ public class UserQuizActivity extends AppCompatActivity {
         loadQuestionsOfUserFromFireBase(auth.getCurrentUser().getUid(),categoryId);
     }
 
-    void loadQuestionsOfUserFromFireBase(String uid, String catId){
+
+    void loadQuestionsOfUserFromFireBase(String uid, String catId) {
         db.collection("quizofuser")
                 .document(uid)
                 .collection("categories")
                 .document(catId)
-                .collection("questions")  // Assuming questions are stored in this sub-collection
+                .collection("questions")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        questions.clear();  // Clear the list before adding new items
+                        questions.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Question question = document.toObject(Question.class);
-                            questions.add(question);
+                            if (document.exists()) {
+                                Question question = document.toObject(Question.class);
+                                questions.add(question);
+                            }
                         }
-                        setNextQuestion();
+                        // Check if there are questions, then start quiz or show alert
+                        if (questions.size() > 0) {
+                            binding.getRoot().setVisibility(View.VISIBLE);
+                            showStartQuizDialog();
+                        } else {
+                            showNoQuestionsAlert();
+                        }
                     } else {
                         Log.e("Firestore", "Error getting questions: ", task.getException());
                     }
                 });
+    }
+
+    void showStartQuizDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Start Quiz")
+                .setMessage("Do you want to start the quiz?")
+                .setPositiveButton("Start", (dialog, which) -> startQuiz())
+                .setNegativeButton("Cancel", (dialog, which) -> finish())
+                .show();
+    }
+
+    void showNoQuestionsAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle("No Questions Available")
+                .setMessage("No questions found for this quiz. Please try again later.")
+                .setPositiveButton("OK", (dialog, which) -> finish())
+                .show();
     }
 
     void addQuestionsToList(QuerySnapshot queryDocumentSnapshots) {

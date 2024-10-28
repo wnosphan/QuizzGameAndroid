@@ -102,7 +102,7 @@ public class QuestionOfUserActivity extends AppCompatActivity {
         EditText etOptionC = dialogView.findViewById(R.id.etOptionC);
         EditText etOptionD = dialogView.findViewById(R.id.etOptionD);
         EditText etCorrectAnswer = dialogView.findViewById(R.id.etCorrectAnswer);
-
+        builder.setTitle("Create Question");
         builder.setPositiveButton("Create", (dialog, which) -> {
             // Retrieve input values
             String questionText = etQuestion.getText().toString().trim();

@@ -9,10 +9,12 @@
 
     <View
         android:id="@+id/view2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="130dp"
         android:background="@drawable/background_bottom"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/view5"
@@ -63,10 +65,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="Who your daddy cuz ? "
+        android:text="Who is your daddy?"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
@@ -74,77 +75,70 @@
         app:layout_constraintStart_toStartOf="@+id/view5"
         app:layout_constraintTop_toTopOf="@+id/view5" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="80dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view5"
-        app:layout_constraintStart_toStartOf="@+id/view5"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@+id/view5"
-        app:srcCompat="@drawable/fiftyfiftyline" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view5"
-        app:layout_constraintEnd_toEndOf="@+id/view5"
-        app:layout_constraintTop_toBottomOf="@+id/view5"
-        app:srcCompat="@drawable/audiencepoll" />
+        <TextView
+            android:id="@+id/option_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/option_unselected"
+            android:onClick="onClick"
+            android:padding="15dp"
+            android:text="Option 1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view5" />
 
-    <TextView
-        android:id="@+id/option_1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/option_unselected"
-        android:onClick="onClick"
-        android:padding="15dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/view5"
-        app:layout_constraintStart_toStartOf="@+id/view5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        <TextView
+            android:id="@+id/option_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/option_unselected"
+            android:onClick="onClick"
+            android:padding="15dp"
+            android:text="Option 2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/option_1" />
 
-    <TextView
-        android:id="@+id/option_2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/option_unselected"
-        android:onClick="onClick"
-        android:padding="15dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/option_1"
-        app:layout_constraintStart_toStartOf="@+id/option_1"
-        app:layout_constraintTop_toBottomOf="@+id/option_1" />
+        <TextView
+            android:id="@+id/option_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/option_unselected"
+            android:onClick="onClick"
+            android:padding="15dp"
+            android:text="Option 3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/option_2" />
 
-    <TextView
-        android:id="@+id/option_3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/option_unselected"
-        android:onClick="onClick"
-        android:padding="15dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/option_2"
-        app:layout_constraintStart_toStartOf="@+id/option_2"
-        app:layout_constraintTop_toBottomOf="@+id/option_2" />
+        <TextView
+            android:id="@+id/option_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/option_unselected"
+            android:onClick="onClick"
+            android:padding="15dp"
+            android:text="Option 4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/option_3" />
 
-    <TextView
-        android:id="@+id/option_4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/option_unselected"
-        android:onClick="onClick"
-        android:padding="15dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/option_3"
-        app:layout_constraintStart_toStartOf="@+id/option_3"
-        app:layout_constraintTop_toBottomOf="@+id/option_3" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/nextBtn"
@@ -158,10 +152,9 @@
         android:text="Next"
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/quizBtn"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/option_4" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/quizBtn"
@@ -175,7 +168,7 @@
         android:text="Quit"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/nextBtn"
-        app:layout_constraintTop_toBottomOf="@+id/option_4" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
