@@ -34,6 +34,15 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
+
+        binding.tvForgotPw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+            }
+        });
+
+
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
+
 
 
     }
