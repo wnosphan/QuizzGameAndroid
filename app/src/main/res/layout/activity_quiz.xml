@@ -92,10 +92,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:background="@drawable/audiencepoll"
+        android:onClick="onClick"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
         app:layout_constraintEnd_toEndOf="@+id/view5"
-        app:layout_constraintTop_toBottomOf="@+id/view5"
-        android:onClick="onClick" />
+        app:layout_constraintTop_toBottomOf="@+id/view5" />
 
 
     <TextView
@@ -137,6 +138,8 @@
         app:layout_constraintStart_toStartOf="@+id/option_2"
         app:layout_constraintTop_toBottomOf="@+id/option_2" />
 
+
+
     <TextView
         android:id="@+id/option_4"
         android:layout_width="0dp"
@@ -149,6 +152,27 @@
         app:layout_constraintEnd_toEndOf="@+id/option_3"
         app:layout_constraintStart_toStartOf="@+id/option_3"
         app:layout_constraintTop_toBottomOf="@+id/option_3" />
+
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="12dp"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option_4"
+        app:layout_constraintVertical_bias="0.818" />
 
     <Button
         android:id="@+id/nextBtn"
