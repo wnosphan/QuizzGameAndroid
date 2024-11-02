@@ -1,7 +1,7 @@
 package com.prm392.quizgame.model;
 
 public class Question {
-    private String question, optionA, optionB, optionC, optionD, correctAns;
+    private String question, optionA, optionB, optionC, optionD, correctAns, description;
 
     public Question() {
 
@@ -62,5 +62,13 @@ public class Question {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

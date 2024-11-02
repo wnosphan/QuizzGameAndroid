@@ -51,7 +51,6 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          String categoryId = getIntent().getStringExtra("catId");
-
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         questions = new ArrayList<>();
@@ -145,6 +144,7 @@ public class QuizActivity extends AppCompatActivity {
             showAnswer();
             textView.setBackground(getResources().getDrawable(drawable.option_wrong));
         }
+        binding.imageView4.setVisibility(View.VISIBLE);
 
     }
     void resetTimer(){
@@ -230,7 +230,10 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         showAnswer(); // Hiển thị đáp án đúng sau khi người dùng chọn câu trả lời
-
+        if (view.getId() == R.id.imageView4) {
+            binding.descriptionTextView.setText(question.getDescription()); // Hiển thị giải thích
+            binding.descriptionTextView.setVisibility(View.VISIBLE); // Hiển thị TextView giải thích
+        }
         // Chuyển sang câu hỏi tiếp theo khi nhấn nút "Next"
         if (view.getId() == R.id.nextBtn) {
             index++;
