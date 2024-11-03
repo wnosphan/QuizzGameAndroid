@@ -27,6 +27,15 @@
             android:contentDescription="Back"
             android:scaleType="centerInside"
             android:src="@drawable/baseline_arrow_back_24" />
+        <ImageButton
+            android:id="@+id/btnShowMenuOption"
+            android:layout_width="50dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Menu"
+            android:scaleType="centerInside"
+            android:src="@drawable/baseline_more_vert_24" />
 
     </androidx.appcompat.widget.Toolbar>
 

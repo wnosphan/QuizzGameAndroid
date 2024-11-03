@@ -61,6 +61,7 @@ public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapte
             public void onClick(View v) {
                 Intent intent = new Intent(context, QuestionOfUserActivity.class);
                 intent.putExtra("catId", category.getCategoryId());
+                intent.putExtra("catName", category.getCategoryName());
                 context.startActivity(intent);
             }
         });

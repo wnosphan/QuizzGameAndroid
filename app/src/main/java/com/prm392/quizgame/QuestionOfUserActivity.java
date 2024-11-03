@@ -1,5 +1,6 @@
 package com.prm392.quizgame;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.prm392.quizgame.fragment.UserCategoryFragment;
 import com.prm392.quizgame.model.Question;
 
 import java.util.ArrayList;
@@ -32,6 +36,9 @@ public class QuestionOfUserActivity extends AppCompatActivity {
     private QuestionAdapter questionAdapter;
     private List<Question> questionList = new ArrayList<>();
     private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private String catId = "";
+    private String catName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,22 +47,27 @@ public class QuestionOfUserActivity extends AppCompatActivity {
         Button btnCreateQuestion = findViewById(R.id.btnCreateQuestion);
         Button btnStartQuiz = findViewById(R.id.btnStartQuiz);
         ImageButton btnBack = findViewById(R.id.btnBackToCategory);
+        ImageButton btnShowMenu = findViewById(R.id.btnShowMenuOption);
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
-
+        auth = FirebaseAuth.getInstance();
         // Initialize RecyclerView
         recyclerViewQuestion = findViewById(R.id.recyclerViewQuestion);
         recyclerViewQuestion.setLayoutManager(new LinearLayoutManager(this));
-
+        catId = getIntent().getStringExtra("catId");
+        catName = getIntent().getStringExtra("catName");
         // Initialize adapter and set it to RecyclerView
         questionAdapter = new QuestionAdapter(this, questionList);
         recyclerViewQuestion.setAdapter(questionAdapter);
 
+
         btnCreateQuestion.setOnClickListener(v -> showCreateQuestionDialog());
 
 
-        // Get category ID from the intent
-        String catId = getIntent().getStringExtra("catId");
+        btnShowMenu.setOnClickListener(v -> {
+            showPopupMenuCategory(v);
+        });
+
 
         if (catId != null) {
             loadQuestions(catId);
@@ -183,5 +195,55 @@ public class QuestionOfUserActivity extends AppCompatActivity {
     }
 
 
+    private void showPopupMenuCategory(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.category_menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.deleteAc) {
+                showDeleteConfirmationDialog();
+                return true;
+            }
+            return false;
+        });
+        popupMenu.show();
+    }
+
+    private void showDeleteConfirmationDialog() {
+        // Tạo và hiển thị AlertDialog xác nhận việc xóa
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Category")
+                .setMessage("Are you sure you want to delete the category: " + catName + "?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Xác nhận xóa, gọi hàm deleteCategory
+                    deleteCategory();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // Hủy bỏ, đóng hộp thoại
+                    dialog.dismiss();
+                })
+                .create()
+                .show();
+    }
+
+    private void deleteCategory() {
+///quizofuser/cH3sEdb88cUayQg1nH1Ug4pnJOk1/categories/Q4USijkUQxao9zOqMe8J/questions/45Rhd1ARM1x35zcNynQW
+        String uid = auth.getCurrentUser().getUid();
+
+        db.collection("quizofuser")
+                .document(uid)
+                .collection("categories")
+                .document(catId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Category: " + catName + " deleted successfully", Toast.LENGTH_SHORT).show();
+
+                    finish(); // Close this activity
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error deleting category", e);
+                    Toast.makeText(this, "Failed to delete category", Toast.LENGTH_SHORT).show();
+                });
+
+    }
 
 }

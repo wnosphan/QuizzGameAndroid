@@ -33,6 +33,12 @@ public class UserCategoryFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        loadCategoryOfUser();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -51,7 +57,7 @@ public class UserCategoryFragment extends Fragment {
         adapter = new UserCategoryAdapter(getContext(), categories);
 
         // Load categories from Firestore
-        loadCategoryOfUser();
+//        loadCategoryOfUser();
 
         binding.cateList.setLayoutManager(new GridLayoutManager(getContext(), 2));
         binding.cateList.setAdapter(adapter);
