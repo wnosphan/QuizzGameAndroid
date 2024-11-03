@@ -6,6 +6,7 @@ public class User {
     private String password;
     private long changeSpin;
     private long coins = 25;
+    private boolean isPremium = false;
 
     public User() {
     }
@@ -21,6 +22,14 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public boolean isPremium() {
+        return true;
+    }
+
+    public void setPremium(boolean premium) {
+        isPremium = premium;
     }
 
     public String getName() {

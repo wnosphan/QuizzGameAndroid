@@ -54,12 +54,14 @@ public class WalletFragment extends Fragment {
             public void onClick(View view) {
                 if(user.getCoins()>=10000){
                     String uid = FirebaseAuth.getInstance().getUid();
-                    String payPalEmail = binding.emailBoxWallet.getText().toString();
+                    String payPalEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                     WithdrawRequest request = new WithdrawRequest( uid,payPalEmail,user.getName());
 
                     db.collection("withdraws").document(uid).set(request).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            db.collection("users").document(FirebaseAuth.getInstance().getUid()).update("isPremium",user.isPremium());
+
                             Toast.makeText(getContext(), "Request Sent", Toast.LENGTH_SHORT).show();
 
                         }
