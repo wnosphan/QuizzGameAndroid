@@ -38,7 +38,7 @@ public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapte
     @NonNull
     @Override
     public UserCategoryAdapter.UserCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_category, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_user_category, null);
         return new UserCategoryAdapter.UserCategoryViewHolder(view);
     }
 
@@ -84,8 +84,8 @@ public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapte
             } else {
                 selectedCategories.remove(category);
             }
-            notifyItemChanged(position); // Update the item to reflect the new state
-            return true; // Consume the long click event
+            notifyItemChanged(position);
+            return true;
         });
     }
 
@@ -140,10 +140,10 @@ public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapte
 
         public UserCategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.image);
-            textView = itemView.findViewById(R.id.category);
-            cateSelect = itemView.findViewById(R.id.cateSelect);
-            liCate = itemView.findViewById(R.id.liCate);
+            imageView = itemView.findViewById(R.id.uimage);
+            textView = itemView.findViewById(R.id.ucategory);
+            cateSelect = itemView.findViewById(R.id.ucateSelect);
+            liCate = itemView.findViewById(R.id.uliCate);
         }
     }
 }

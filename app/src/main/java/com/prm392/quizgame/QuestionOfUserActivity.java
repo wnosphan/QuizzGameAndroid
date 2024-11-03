@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +39,7 @@ public class QuestionOfUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question_of_user);
         Button btnCreateQuestion = findViewById(R.id.btnCreateQuestion);
         Button btnStartQuiz = findViewById(R.id.btnStartQuiz);
+        ImageButton btnBack = findViewById(R.id.btnBackToCategory);
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
@@ -66,6 +70,10 @@ public class QuestionOfUserActivity extends AppCompatActivity {
             }
         });
 
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
+
     }
 
     private void loadQuestions(String catId) {
@@ -91,43 +99,64 @@ public class QuestionOfUserActivity extends AppCompatActivity {
     }
 
     private void showCreateQuestionDialog() {
-        // Inflate the dialog layout
+        // Create an AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_create_question, null);
         builder.setView(dialogView);
 
+        // Initialize the views from the custom layout
         EditText etQuestion = dialogView.findViewById(R.id.etQuestion);
         EditText etOptionA = dialogView.findViewById(R.id.etOptionA);
         EditText etOptionB = dialogView.findViewById(R.id.etOptionB);
         EditText etOptionC = dialogView.findViewById(R.id.etOptionC);
         EditText etOptionD = dialogView.findViewById(R.id.etOptionD);
-        EditText etCorrectAnswer = dialogView.findViewById(R.id.etCorrectAnswer);
+
+        // Initialize the RadioGroup
+        RadioGroup radioGroupCorrectAnswer = dialogView.findViewById(R.id.radioGroupCorrectAnswer);
+
         builder.setTitle("Create Question");
+
         builder.setPositiveButton("Create", (dialog, which) -> {
-            // Retrieve input values
             String questionText = etQuestion.getText().toString().trim();
             String optionA = etOptionA.getText().toString().trim();
             String optionB = etOptionB.getText().toString().trim();
             String optionC = etOptionC.getText().toString().trim();
             String optionD = etOptionD.getText().toString().trim();
-            String correctAnswer = etCorrectAnswer.getText().toString().trim();
 
+            // Check if any field is empty
             if (questionText.isEmpty() || optionA.isEmpty() || optionB.isEmpty() ||
-                    optionC.isEmpty() || optionD.isEmpty() || correctAnswer.isEmpty()) {
+                    optionC.isEmpty() || optionD.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // Get the selected RadioButton ID
+            int selectedId = radioGroupCorrectAnswer.getCheckedRadioButtonId();
+            Log.d("RadioGroup", "Child Count: " + radioGroupCorrectAnswer.getChildCount());
 
-            // Create Question object
+            if (selectedId == -1) {
+                Toast.makeText(this, "Please select the correct answer", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Determine the correct answer based on the selected RadioButton
+            String correctAnswer = "";
+            if (selectedId == R.id.radioOptionA) {
+                correctAnswer = optionA;
+            } else if (selectedId == R.id.radioOptionB) {
+                correctAnswer = optionB;
+            } else if (selectedId == R.id.radioOptionC) {
+                correctAnswer = optionC;
+            } else if (selectedId == R.id.radioOptionD) {
+                correctAnswer = optionD;
+            }
+
             Question newQuestion = new Question(questionText, optionA, optionB, optionC, optionD, correctAnswer);
 
-            // Save to Firestore
             saveQuestionToFirestore(newQuestion);
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        // Show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -152,5 +181,7 @@ public class QuestionOfUserActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to add question", Toast.LENGTH_SHORT).show();
                 });
     }
+
+
 
 }
