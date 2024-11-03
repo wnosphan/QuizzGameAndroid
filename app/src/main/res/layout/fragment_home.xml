@@ -114,13 +114,13 @@
         android:text="Spin Wheel"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/btnInvite"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/btnInvite"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"

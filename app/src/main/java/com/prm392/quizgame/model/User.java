@@ -1,11 +1,16 @@
 package com.prm392.quizgame.model;
 
+import com.google.type.DateTime;
+
+import java.util.Date;
+
 public class User {
     private String name;
     private String email;
     private String password;
     private long changeSpin;
-    private long coins = 25;
+    private Date lastSpinTime;
+    private long coins = 00;
     private boolean isPremium = false;
 
     public User() {
@@ -70,5 +75,13 @@ public class User {
 
     public void setCoins(long coins) {
         this.coins = coins;
+    }
+
+    public Date getLastSpinTime() {
+        return lastSpinTime;
+    }
+
+    public void setLastSpinTime(Date lastSpinTime) {
+        this.lastSpinTime = lastSpinTime;
     }
 }

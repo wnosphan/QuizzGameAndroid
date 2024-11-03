@@ -62,12 +62,12 @@ public class WalletFragment extends Fragment {
                         public void onSuccess(Void aVoid) {
                             db.collection("users").document(FirebaseAuth.getInstance().getUid()).update("isPremium",user.isPremium());
 
-                            Toast.makeText(getContext(), "Request Sent", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "You are Premium User", Toast.LENGTH_SHORT).show();
 
                         }
                     });
                 }else {
-                    Toast.makeText(getContext(), "You need at least 10000 coins to withdraw", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You need at least 10000 coins to upgrade Premium", Toast.LENGTH_SHORT).show();
                 }
             }
         });
