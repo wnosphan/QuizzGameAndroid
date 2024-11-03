@@ -35,17 +35,20 @@ public class UserCategoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadCategoryOfUser();
+        checckIsPreimum();
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         binding = FragmentUserQuizBinding.inflate(inflater, container, false);
 
         // Initialize Firebase
@@ -89,9 +92,11 @@ public class UserCategoryFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
 
+
                         List<Category> categoryList = task.getResult().toObjects(Category.class);
+
                         if(categoryList.isEmpty()) {
-                            binding.notiTitle.setText("No category found. Please create a new one.");
+                            binding.notiTitle.setText("No category found. Please create a new one");
                             binding.notiTitle.setVisibility(View.VISIBLE);
                         } else {
                             binding.notiTitle.setVisibility(View.GONE);
@@ -155,4 +160,27 @@ public class UserCategoryFragment extends Fragment {
                     Log.w("Firestore", "Error adding category " + categoryName, e);
                 });
     }
+    void checckIsPreimum() {
+        categories.clear(); // Clear the current categories
+        database.collection("users").document(auth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        boolean isPremium = documentSnapshot.getBoolean("isPremium");
+
+                        if (isPremium) {
+                            // Nếu là Premium, ẩn thông báo và tải các category
+                            binding.notiTitle.setVisibility(View.GONE);
+                            loadCategoryOfUser();// Tải các danh mục quiz
+                        } else {
+                            // Nếu không phải Premium, hiện thông báo yêu cầu nâng cấp
+                            binding.createButton.setVisibility(View.GONE);
+                            binding.notiTitle.setText("Please upgrade to Premium to access categories.");
+                            binding.notiTitle.setVisibility(View.VISIBLE);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.d("TAG", "Error checking premium status: " + e.getMessage()));
+    }
+
 }

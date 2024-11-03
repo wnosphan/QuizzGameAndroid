@@ -1,6 +1,7 @@
 package com.prm392.quizgame.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -71,6 +72,15 @@ public class HomeFragment extends Fragment {
 
         binding.btnSpinner.setOnClickListener(view -> {
             startActivity(new Intent(getContext(), SpinnerActivity.class));
+        });
+        binding.btnInvite.setOnClickListener(view -> {
+            // Giả sử bạn có đường dẫn tới bức ảnh trong biến imagePath
+            String imagePath = "https://lh5.googleusercontent.com/qA4Xs4ZjXC5uXFyvVxE3ti2DaydWFzRqBXBQVCX89D3_Db-mqbuMasm5CNu56QgV4Kjm82cVvk8NLfT_O5rUSjw=w1280"; // Thay đổi với đường dẫn thực tế
+
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("image/jpeg"); // Hoặc "image/png" nếu là ảnh PNG
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imagePath));
+            startActivity(Intent.createChooser(shareIntent, "Share Image"));
         });
 
 
