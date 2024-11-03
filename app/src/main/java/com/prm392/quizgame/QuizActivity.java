@@ -194,6 +194,10 @@ public class QuizActivity extends AppCompatActivity {
         binding.option2.setVisibility(View.VISIBLE);
         binding.option3.setVisibility(View.VISIBLE);
         binding.option4.setVisibility(View.VISIBLE);
+
+        binding.descriptionTextView.setVisibility(View.INVISIBLE);
+        binding.imageView4.setVisibility(View.INVISIBLE);
+
     }
     public void onClick(View view) {
         // Xử lý nút 50:50
