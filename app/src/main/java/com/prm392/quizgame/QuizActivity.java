@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -195,7 +197,6 @@ public class QuizActivity extends AppCompatActivity {
         binding.option3.setVisibility(View.VISIBLE);
         binding.option4.setVisibility(View.VISIBLE);
 
-        binding.descriptionTextView.setVisibility(View.INVISIBLE);
         binding.imageView4.setVisibility(View.INVISIBLE);
 
     }
@@ -235,8 +236,16 @@ public class QuizActivity extends AppCompatActivity {
 
         showAnswer(); // Hiển thị đáp án đúng sau khi người dùng chọn câu trả lời
         if (view.getId() == R.id.imageView4) {
-            binding.descriptionTextView.setText(question.getDescription()); // Hiển thị giải thích
-            binding.descriptionTextView.setVisibility(View.VISIBLE); // Hiển thị TextView giải thích
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_explanation, null);
+
+            TextView explanationTextView = dialogView.findViewById(R.id.explanationTextView);
+            explanationTextView.setText(question.getDescription());
+
+            builder.setView(dialogView);
+            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+            builder.show();
         }
         // Chuyển sang câu hỏi tiếp theo khi nhấn nút "Next"
         if (view.getId() == R.id.nextBtn) {
@@ -254,7 +263,5 @@ public class QuizActivity extends AppCompatActivity {
             finish(); // Thoát quiz khi nhấn "Quit"
         }
     }
-
-
 
 }

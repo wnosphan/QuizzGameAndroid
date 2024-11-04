@@ -49,6 +49,7 @@ public class WalletFragment extends Fragment {
 
             }
         });
+
         binding.sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +64,8 @@ public class WalletFragment extends Fragment {
                             db.collection("users").document(FirebaseAuth.getInstance().getUid()).update("isPremium",user.isPremium());
 
                             Toast.makeText(getContext(), "You are Premium User", Toast.LENGTH_SHORT).show();
-
+                            binding.premiumIcon.setVisibility(View.VISIBLE);
+                            binding.textView.setVisibility(View.INVISIBLE);
                         }
                     });
                 }else {
@@ -72,7 +74,20 @@ public class WalletFragment extends Fragment {
             }
         });
 
-
+        checkIsPremium();
         return binding.getRoot();
+    }
+  void checkIsPremium(){
+        db.collection("users").document(FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                if(user.isPremium()){
+                    binding.premiumIcon.setVisibility(View.VISIBLE);
+                    binding.textView.setVisibility(View.INVISIBLE);
+                    binding.sendBtn.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 }
